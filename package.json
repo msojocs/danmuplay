@@ -1,0 +1,7 @@
+{
+  "name": "untitled",
+  "main": "index.html",
+  "dependencies": {
+    "comment-core-library": "^0.11.1"
+  }
+}
