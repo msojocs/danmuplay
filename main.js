@@ -6,26 +6,36 @@ let matchData;
 let matches = [];
 const HOST = "https://api.acplay.net";
 
+const getURLComments = url => {
+  $.ajaxSettings.async = false;
+  const danmukuList = []
+  $.get(`${HOST}/api/v2/extcomment?url=${url}`, function (data) {
+    console.log('其它站点的：', url, data)
+    const comments = data.comments
+    for(let comment of comments){
+      let p = comment.p.split(',')
+      danmukuList.push({
+          mode: parseInt(p[1]),
+          text: comment.m,
+          stime: parseInt(p[0]) * 1000,
+          size: 25,
+          color: parseInt(p[2])
+      })
+    }
+  })
+  $.ajaxSettings.async = true;
+  return danmukuList
+}
+function addCommentLink(){
+  console.log(addCommentLinkData.value)
+  const link = addCommentLinkData.value
+  const comments = getURLComments(link)
+  for (const comment of comments) {  
+    CM.insert(comment)
+  }
+}
 function getOtherComment(episodeId, min = 100){
   $.ajaxSettings.async = false;
-  const getURLComments = url => {
-    const danmukuList = []
-    $.get(`${HOST}/api/v2/extcomment?url=${url}`, function (data) {
-      console.log('其它站点的：', url, data)
-      const comments = data.comments
-      for(let comment of comments){
-        let p = comment.p.split(',')
-        danmukuList.push({
-            mode: parseInt(p[1]),
-            text: comment.m,
-            stime: parseInt(p[0]) * 1000,
-            size: 25,
-            color: parseInt(p[2])
-        })
-      }
-    })
-    return danmukuList
-  }
   const danmukuList = []
   $.get(`${HOST}/api/v2/related/${episodeId}`, function (data) {
     console.log('其它弹幕站点：', data)
