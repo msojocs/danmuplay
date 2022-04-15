@@ -1,7 +1,7 @@
 var CM = new CommentManager(
   document.getElementById("my-comment-stage")
 );
-CM.init(); // 初始化
+// CM.init(); // 初始化
 let matchData;
 let matches = [];
 const HOST = "https://api.acplay.net";
@@ -79,6 +79,8 @@ function getComment(data) {
   });
 }
 function mainStart(data) {
+
+  CM.init(); // 初始化
   if($("#play")[0].duration)
   data.duration = $("#play")[0].duration;
   $.post(`${HOST}/api/v2/match`, data, function (data, status) {
